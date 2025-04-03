@@ -1,0 +1,71 @@
+# Versão do JDK usada, mais especificamente OpenJDK-17.0.2
+[tools]
+java = '17'
+
+# Usado para fazer o Build de todas as classes do projeto para o diretório dist
+[tasks.build]
+run = 'javac -d dist --source-path ./src src/*.java'
+description = 'build this project'
+alias = 'bc'
+
+# Executa o exemplo do SEGUNDO site "programando em java"
+[tasks.exec-ballem]
+run = 'java -cp dist ballem.Main'
+description = 'exec the ballem example'
+alias = 'eb'
+
+# Executa o exemplo do QUARTO site "geeks forge"
+[tasks.exec-geeks]
+run = 'java -cp dist geeks.Main'
+description = 'exec the geeks forge example'
+alias = 'eg'
+
+# Executa o exemplo do TERCEIRO site "medium"
+[tasks.exec-medium]
+run = 'java -cp dist medium.Main'
+description = 'exec the medium example'
+alias = 'em'
+
+# Executa o exemplo do PRIMEIRO site "refactor guru"
+[tasks.exec-refactor]
+run = 'java -cp dist refactor.Main'
+description = 'exec the refactor guru example'
+alias = 'er'
+
+# Executa a classe Main geral, precisa de um dos argumentos listados abaixo
+# Remova o "{{arg(name="example")}}" e substitua por um dos argumentos
+[tasks.exec-main]
+run = 'java -cp dist Main {{arg(name="example")}}'
+description = 'exec the main class, needs a argument'
+alias = 'eM'
+usage = '''
+arg "example" {
+  choices "Ballem" "Geeks" "Medium" "Refactor"
+}
+'''
+
+# Faz o Build para um arquivo .jar
+[tasks.build-jar]
+run = 'jar cfm builder.jar MANIFEST.mf -C dist .'
+description = 'generates a jar file for this project'
+alias = 'bj'
+
+# Remova o "{{arg(name="example")}}" e substitua por um dos argumentos
+# Executa o arquivo .jar, precisa de um dos argumentos listados abaixo
+[tasks.exec-jar]
+run = 'java -jar builder.jar {{arg(name="example")}}'
+description = 'execute the jar file, needs a argument'
+alias = 'ej'
+usage = '''
+arg "example" {
+  choices "Ballem" "Geeks" "Medium" "Refactor"
+}
+'''
+
+# Comando para facilitar a criação do arquivo .tar.gz
+[tasks.compact-tar]
+run = 'tar -czvf builder.tar.gz --exclude-from ".gitignore" --exclude ".git"  --exclude "dist" .'
+
+# Comando para facilitar a criação do arquivo .zip
+[tasks.compact-zip]
+run = 'zip -r builder.zip . -x@.gitignore -x .git/\* -x dist/\*'
